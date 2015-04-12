@@ -18,15 +18,22 @@ public class Neuron {
 	
 	private List<Double> lastInputs;
 	
+	private double bias = 0;
+	
 
-	public Neuron(int inputCount, String activationFunction) {
+	public Neuron(int inputCount, String activationFunction, boolean bias) {
 		super();
         Random rn = new Random();
         weights = new ArrayList<Double>();
         //weights.add((double) rn.nextInt(100) / 500);
         for (int i = 0; i < inputCount; i++) {
-            weights.add((double) rn.nextInt(100) / 500);
+            weights.add((double) rn.nextInt(100) / 400);
         }
+        
+        if(bias) {
+        	this.bias = (double) rn.nextInt(100) / 400;
+        }
+        
         if(activationFunction.equals("sigmoidal")) {
         	this.activationFunction = new SigmoidalActivationFunction(); 
         }
@@ -39,6 +46,9 @@ public class Neuron {
 
 			sum += inputList.get(i) * weights.get(i);
 		}
+		if(bias != 0) {
+			sum += 1 * bias;
+		}
 		return sum;
 	}
 	
@@ -50,14 +60,18 @@ public class Neuron {
 	 */
 	public void propage(double learningFactory) {
 		for (int i = 0; i < weights.size(); i++) {
-			Double newWeight = weights.get(i) -  (weights.get(i) * lastInputs.get(i) * learningFactory);
+			Double newWeight = weights.get(i) +  (delta * lastInputs.get(i) * learningFactory);
 			weights.set(i, newWeight);
+		}
+		if(bias != 0) {
+			bias += delta * 1 * learningFactory;
 		}
 	}
 
 	public Double getOutput(List<Double> inputList) {
-		
-		this.lastSignal = generateSum(inputList);
+		if(inputList != null) { //je¿eli nie podamy listy z wejœciem, podajemy ostatni sygna³ pobudzenia aktywowany 
+			this.lastSignal = generateSum(inputList);
+		}
 		return activationFunction.activate(lastSignal);
 	}
 	
@@ -87,6 +101,14 @@ public class Neuron {
 
 	public void setSignal(double signal) {
 		this.lastSignal = signal;
+	}
+
+	public double getBias() {
+		return bias;
+	}
+
+	public void setBias(double bias) {
+		this.bias = bias;
 	}
 
 

@@ -31,7 +31,7 @@ public class MultiLayerPerceptron {
 
 	private double lerningFactory;
 	
-	public MultiLayerPerceptron(List<ArrayList<Double>> inputList, int inputLayerNeuronCount, int hiddenLayerNeuronCount, int outputLayerNeuronCount,double lerningFactory) {
+	public MultiLayerPerceptron(List<ArrayList<Double>> inputList, int inputLayerNeuronCount, int hiddenLayerNeuronCount, int outputLayerNeuronCount,double lerningFactory, boolean bias) {
 		
 		this.inputList = inputList;
 		
@@ -39,16 +39,16 @@ public class MultiLayerPerceptron {
 		
 		this.errorList = new ArrayList<Double>();
 		
-		for(int i=0; i < inputLayerNeuronCount; i++) {
-			inputLayer.add(new Neuron(inputList.size(), "sigmoidal"));
-		}
+//		for(int i=0; i < inputLayerNeuronCount; i++) {
+//			inputLayer.add(new Neuron(inputList.size(), "sigmoidal"));
+//		}
 		
 		for(int i=0; i < hiddenLayerNeuronCount; i++) {
-			hiddenLayer.add(new Neuron(inputLayerNeuronCount, "sigmoidal"));
+			hiddenLayer.add(new Neuron(inputLayerNeuronCount, "sigmoidal",bias));
 		}
 		
 		for(int i=0; i < outputLayerNeuronCount; i++) {
-			outputLayer.add(new Neuron(hiddenLayerNeuronCount, "sigmoidal"));
+			outputLayer.add(new Neuron(hiddenLayerNeuronCount, "sigmoidal",bias));
 		}
 	}
 	
@@ -59,13 +59,19 @@ public class MultiLayerPerceptron {
 		Double error = 0D;
 		int i=0;
 		for (; i < inputList.size(); i++) {
-			List<Double> inputLayerOutput = calculateLayer(inputLayer,inputList.get(i));
-			List<Double> hiddenLayerOutput = calculateLayer(hiddenLayer,inputLayerOutput);
+			//List<Double> inputLayerOutput = calculateLayer(inputLayer,inputList.get(i));
+			List<Double> hiddenLayerOutput = calculateLayer(hiddenLayer,inputList.get(i));
 			List<Double> mlpOutput = calculateLayer(outputLayer,hiddenLayerOutput);
 			error += calculateErrorMLP(mlpOutput,inputList.get(i));
 			//System.out.println("I: "+i+" error: "+error);
 			calculateErrors(mlpOutput,inputList.get(i));
 			propagateErrors(lerningFactory);
+			
+			System.out.println(mlpOutput.get(0));
+			System.out.println(mlpOutput.get(1));
+			System.out.println(mlpOutput.get(2));
+			System.out.println(mlpOutput.get(3));
+			System.out.println("======");
 		}
 		return error/i;
 	}
@@ -76,7 +82,7 @@ public class MultiLayerPerceptron {
 			error +=  Math.pow((mlpOutput.get(i)-arrayList.get(i)),2);
 			
 		}
-		System.out.println("calculateErrorMLP: " + error);
+		//System.out.println("calculateErrorMLP: " + error);
 		return error;
 	}
 
@@ -86,9 +92,9 @@ public class MultiLayerPerceptron {
 	 * @param hiddenLayerOutput 
 	 */
 	private void propagateErrors(double lerningFactory) {
-		for (Neuron neuron : inputLayer) {
-			neuron.propage(lerningFactory);
-		}
+//		for (Neuron neuron : inputLayer) {
+//			neuron.propage(lerningFactory);
+//		}
 		for (Neuron neuron : outputLayer) {
 			neuron.propage(lerningFactory);
 		}
@@ -100,7 +106,8 @@ public class MultiLayerPerceptron {
 	private void calculateErrors(List<Double> mlpOutput, List<Double> list) {
 		
 		for (int i=0; i < outputLayer.size(); i++) {
-			double delta = (list.get(i) -  mlpOutput.get(i)) * outputLayer.get(i).getActivaionFunctionDerivative();
+			double delta = (list.get(i) -  mlpOutput.get(i)) * mlpOutput.get(i) * (1 - mlpOutput.get(i));  
+			//double delta = (list.get(i) -  mlpOutput.get(i)) * outputLayer.get(i).getActivaionFunctionDerivative();
 			outputLayer.get(i).setDelta(delta);
 		}
 		
@@ -109,18 +116,19 @@ public class MultiLayerPerceptron {
 			for (int j=0; j < outputLayer.size(); j++) {
 				delta += outputLayer.get(j).getDelta() *  outputLayer.get(j).getWeights().get(i);
 			}
-			delta *= hiddenLayer.get(i).getActivaionFunctionDerivative();
+			delta *= hiddenLayer.get(i).getOutput(null) * (1 - hiddenLayer.get(i).getOutput(null));
+			//delta *= hiddenLayer.get(i).getActivaionFunctionDerivative();
 			hiddenLayer.get(i).setDelta(delta);
 		}
 		
-		for(int i=0; i < inputLayer.size(); i++) {
-			double delta = 0;
-			for (int j=0; j < hiddenLayer.size(); j++) {
-				delta += hiddenLayer.get(j).getDelta() *  hiddenLayer.get(j).getWeights().get(i);
-			}
-			delta *= inputLayer.get(i).getActivaionFunctionDerivative();
-			inputLayer.get(i).setDelta(delta);
-		}
+//		for(int i=0; i < inputLayer.size(); i++) {
+//			double delta = 0;
+//			for (int j=0; j < hiddenLayer.size(); j++) {
+//				delta += hiddenLayer.get(j).getDelta() *  hiddenLayer.get(j).getWeights().get(i);
+//			}
+//			delta *= inputLayer.get(i).getActivaionFunctionDerivative();
+//			inputLayer.get(i).setDelta(delta);
+//		}
 	}
 
 	/**
@@ -145,7 +153,7 @@ public class MultiLayerPerceptron {
 			Double epochError = doEpoch();
 			System.out.println("Epoch nr: "+i+", error: "+epochError);
 			errorList.add(epochError);
-			Collections.shuffle(inputList);
+			//Collections.shuffle(inputList);
 		}
 	}
 

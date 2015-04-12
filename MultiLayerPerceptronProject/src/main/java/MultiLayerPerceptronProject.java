@@ -19,10 +19,11 @@ public class MultiLayerPerceptronProject {
 		
 		int hiddenLayerNeuronCount = 3;
 		int outputLayerNeuronCount = 4;
-		int inputLayerNeuronCount = 1;
+		int inputLayerNeuronCount = 4;
 		double lerningFactory = 0.1;
+		boolean bias = true;
 		
-		multiLayerPerceptron = new MultiLayerPerceptron(inputList,hiddenLayerNeuronCount,inputLayerNeuronCount,outputLayerNeuronCount,lerningFactory);
+		multiLayerPerceptron = new MultiLayerPerceptron(inputList,inputLayerNeuronCount,hiddenLayerNeuronCount,outputLayerNeuronCount,lerningFactory,bias);
 		
 		multiLayerPerceptron.learn();
 	}
