@@ -189,4 +189,12 @@ public class MultiLayerPerceptron {
 		this.inputList = inputList;
 	}
 
+	public List<Double> getErrorList() {
+		return errorList;
+	}
+
+	public void setErrorList(List<Double> errorList) {
+		this.errorList = errorList;
+	}
+
 }
