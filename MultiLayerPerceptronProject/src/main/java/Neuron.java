@@ -49,7 +49,10 @@ public class Neuron {
 	 * 
 	 */
 	public void propage(double learningFactory) {
-			
+		for (int i = 0; i < weights.size(); i++) {
+			Double newWeight = weights.get(i) -  (weights.get(i) * lastInputs.get(i) * learningFactory);
+			weights.set(i, newWeight);
+		}
 	}
 
 	public Double getOutput(List<Double> inputList) {

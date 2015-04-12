@@ -57,7 +57,7 @@ public class MultiLayerPerceptron {
 		List<Double> mlpOutput = calculateLayer(outputLayer,hiddenLayerOutput);
 		
 		calculateErrors(mlpOutput);
-		propagateErrors(lerningFactory, mlpOutput, hiddenLayerOutput, inputLayerOutput);
+		propagateErrors(lerningFactory);
 	}
 	
 	/**
@@ -65,18 +65,15 @@ public class MultiLayerPerceptron {
 	 * @param inputLayerOutput 
 	 * @param hiddenLayerOutput 
 	 */
-	private void propagateErrors(double lerningFactory,List<Double> mlpOutput, List<Double> hiddenLayerOutput, List<Double> inputLayerOutput) {
-		
-		for (int i=0; i < outputLayer.size(); i++) {
-			
+	private void propagateErrors(double lerningFactory) {
+		for (Neuron neuron : inputLayer) {
+			neuron.propage(lerningFactory);
 		}
-		
-		for(int i=0; i < hiddenLayer.size(); i++) {
-			
+		for (Neuron neuron : outputLayer) {
+			neuron.propage(lerningFactory);
 		}
-		
-		for(int i=0; i < inputLayer.size(); i++) {
-			
+		for (Neuron neuron : hiddenLayer) {
+			neuron.propage(lerningFactory);
 		}
 	}
 
