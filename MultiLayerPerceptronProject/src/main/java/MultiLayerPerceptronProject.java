@@ -17,7 +17,7 @@ public class MultiLayerPerceptronProject {
 		
 		List<ArrayList<Double>> inputList = readInputFromFile();
 		
-		int hiddenLayerNeuronCount = 1;
+		int hiddenLayerNeuronCount = 3;
 		int outputLayerNeuronCount = 4;
 		int inputLayerNeuronCount = 1;
 		double lerningFactory = 0.1;
