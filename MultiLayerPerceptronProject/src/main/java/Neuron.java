@@ -57,7 +57,9 @@ public class Neuron {
 
 	public Double getOutput(List<Double> inputList) {
 		
-		this.lastSignal = generateSum(inputList);
+		if(inputList != null) {
+			this.lastSignal = generateSum(inputList);
+		}
 		return activationFunction.activate(lastSignal);
 	}
 	

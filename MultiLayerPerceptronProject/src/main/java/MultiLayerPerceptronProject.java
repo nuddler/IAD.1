@@ -17,10 +17,10 @@ public class MultiLayerPerceptronProject {
 		
 		List<ArrayList<Double>> inputList = readInputFromFile();
 		
-		int hiddenLayerNeuronCount = 2;
+		int hiddenLayerNeuronCount = 1;
 		int outputLayerNeuronCount = 4;
 		int inputLayerNeuronCount = 1;
-		double lerningFactory = 0.6;
+		double lerningFactory = 0.1;
 		
 		multiLayerPerceptron = new MultiLayerPerceptron(inputList,hiddenLayerNeuronCount,inputLayerNeuronCount,outputLayerNeuronCount,lerningFactory);
 		
