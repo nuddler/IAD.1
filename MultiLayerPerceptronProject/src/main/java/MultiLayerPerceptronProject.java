@@ -1,7 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -16,18 +15,16 @@ public class MultiLayerPerceptronProject {
 
 	public static void main(String[] args) throws FileNotFoundException {
 		
-		ArrayList<ArrayList<Double>> readInputFromFile = readInputFromFile();
+		List<ArrayList<Double>> inputList = readInputFromFile();
 		
-/*		List<Double> inputList = null;
-		
-		int hiddenLayerNeuronCount = 0;
-		int outputLayerNeuronCount = 0;
-		int inputLayerNeuronCount = 0;
-		double lerningFactory = 0;
+		int hiddenLayerNeuronCount = 2;
+		int outputLayerNeuronCount = 4;
+		int inputLayerNeuronCount = 1;
+		double lerningFactory = 0.6;
 		
 		multiLayerPerceptron = new MultiLayerPerceptron(inputList,hiddenLayerNeuronCount,inputLayerNeuronCount,outputLayerNeuronCount,lerningFactory);
 		
-		multiLayerPerceptron.learn();*/
+		multiLayerPerceptron.learn();
 	}
 	
 	public static ArrayList<ArrayList<Double>> readInputFromFile() throws FileNotFoundException{
@@ -48,5 +45,5 @@ public class MultiLayerPerceptronProject {
 		}
 		return input;	
 	}
-}
 
+}

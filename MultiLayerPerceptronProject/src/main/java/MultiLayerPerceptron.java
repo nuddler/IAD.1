@@ -24,11 +24,11 @@ public class MultiLayerPerceptron {
 	
 	private List<Neuron> outputLayer = new ArrayList<Neuron>();
 
-	private List<Double> inputList;
+	private List<ArrayList<Double>> inputList;
 
 	private double lerningFactory;
 	
-	public MultiLayerPerceptron(List<Double> inputList, int inputLayerNeuronCount, int hiddenLayerNeuronCount, int outputLayerNeuronCount,double lerningFactory) {
+	public MultiLayerPerceptron(List<ArrayList<Double>> inputList, int inputLayerNeuronCount, int hiddenLayerNeuronCount, int outputLayerNeuronCount,double lerningFactory) {
 		
 		this.inputList = inputList;
 		
@@ -51,13 +51,15 @@ public class MultiLayerPerceptron {
 	 * 
 	 */
 	private void doEpoch() {
-		
-		List<Double> inputLayerOutput = calculateLayer(inputLayer, inputList);
-		List<Double> hiddenLayerOutput = calculateLayer(hiddenLayer, inputLayerOutput);
-		List<Double> mlpOutput = calculateLayer(outputLayer,hiddenLayerOutput);
-		
-		calculateErrors(mlpOutput);
-		propagateErrors(lerningFactory);
+		for (int i = 0; i < inputList.size(); i++) {
+
+			List<Double> inputLayerOutput = calculateLayer(inputLayer,inputList.get(i));
+			List<Double> hiddenLayerOutput = calculateLayer(hiddenLayer,inputLayerOutput);
+			List<Double> mlpOutput = calculateLayer(outputLayer,hiddenLayerOutput);
+
+			calculateErrors(mlpOutput,inputList.get(i));
+			propagateErrors(lerningFactory);
+		}
 	}
 	
 	/**
@@ -77,10 +79,10 @@ public class MultiLayerPerceptron {
 		}
 	}
 
-	private void calculateErrors(List<Double> mlpOutput) {
+	private void calculateErrors(List<Double> mlpOutput, List<Double> list) {
 		
 		for (int i=0; i < outputLayer.size(); i++) {
-			double delta = (inputList.get(i) -  mlpOutput.get(i)) * outputLayer.get(i).getActivaionFunctionDerivative();
+			double delta = (list.get(i) -  mlpOutput.get(i)) * outputLayer.get(i).getActivaionFunctionDerivative();
 			outputLayer.get(i).setDelta(delta);
 		}
 		
@@ -152,11 +154,11 @@ public class MultiLayerPerceptron {
 		this.outputLayer = outputLayer;
 	}
 
-	public List<Double> getInputList() {
+	public List<ArrayList<Double>> getInputList() {
 		return inputList;
 	}
 
-	public void setInputList(List<Double> inputList) {
+	public void setInputList(List<ArrayList<Double>> inputList) {
 		this.inputList = inputList;
 	}
 
